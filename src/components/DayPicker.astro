@@ -1,0 +1,13 @@
+---
+const days = Array.from({ length: 31 }, (_, i) => i + 1);
+---
+
+<select class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900">
+  {
+    days.map((day) => (
+      <option selected={day === 1} value={day}>
+        {day}
+      </option>
+    ))
+  }
+</select>
