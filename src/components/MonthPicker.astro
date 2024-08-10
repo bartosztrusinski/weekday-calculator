@@ -1,0 +1,31 @@
+---
+enum Month {
+  January = 1,
+  February,
+  March,
+  April,
+  May,
+  June,
+  July,
+  August,
+  September,
+  October,
+  November,
+  December,
+}
+
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+---
+
+<label>
+  <p class="mb-1">Month</p>
+  <select class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900">
+    {
+      months.map((month) => (
+        <option selected={month === 1} value={month}>
+          {Month[month]}
+        </option>
+      ))
+    }
+  </select>
+</label>
