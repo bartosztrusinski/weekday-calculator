@@ -1,0 +1,53 @@
+---
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
+---
+
+<label>
+  <p class="mb-1">Year</p>
+  <input
+    type="text"
+    data-year-input
+    class="w-20 p-1 text-lg text-slate-900"
+    value={currentYear}
+  />
+  <div
+    data-year-dropdown
+    class="absolute flex hidden w-20 flex-col bg-slate-50"
+  >
+    {
+      years.map((year) => (
+        <button
+          type="button"
+          class="p-1 text-lg text-slate-900 hover:bg-slate-200"
+          value={year}
+        >
+          {year}
+        </button>
+      ))
+    }
+  </div>
+</label>
+<script>
+  const input = document.querySelector('[data-year-input]') as HTMLInputElement;
+  const buttons = document.querySelectorAll('button');
+  const dropdown = document.querySelector(
+    '[data-year-dropdown]',
+  ) as HTMLDivElement;
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      input.value = button.value;
+    });
+  });
+
+  input.addEventListener('focus', () => {
+    dropdown.classList.remove('hidden');
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target !== input) {
+      dropdown.classList.add('hidden');
+    }
+  });
+</script>
