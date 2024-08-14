@@ -33,6 +33,7 @@ const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
   const dropdown = document.querySelector(
     '[data-year-dropdown]',
   ) as HTMLDivElement;
+  const MAX_YEAR = 4000;
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -57,8 +58,29 @@ const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
 
   function updateDropdown() {
     const year = Number(input.value);
+
+    if (isNaN(year)) return;
+
+    const suggestedYear = suggestYear(year);
     buttons.forEach((button, index) => {
-      button.innerText = String(year + index + 1);
+      button.innerText = String(suggestedYear + index + 1);
     });
+  }
+
+  function suggestYear(year: number) {
+    if (year > MAX_YEAR) {
+      return MAX_YEAR - buttons.length;
+    }
+
+    year = Math.max(year, 1);
+
+    const firstDigit = Number(String(year)[0]);
+    const minYear = [1, 2].includes(firstDigit) ? 1000 : 100;
+
+    while (year < minYear) {
+      year *= 10;
+    }
+
+    return year;
   }
 </script>
