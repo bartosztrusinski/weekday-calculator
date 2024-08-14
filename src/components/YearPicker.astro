@@ -20,7 +20,6 @@ const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
         <button
           type="button"
           class="p-1 text-lg text-slate-900 hover:bg-slate-200"
-          value={year}
         >
           {year}
         </button>
@@ -37,11 +36,16 @@ const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      input.value = button.value;
+      input.value = button.innerText;
     });
   });
 
+  input.addEventListener('input', () => {
+    updateDropdown();
+  });
+
   input.addEventListener('focus', () => {
+    updateDropdown();
     dropdown.classList.remove('hidden');
   });
 
@@ -50,4 +54,11 @@ const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
       dropdown.classList.add('hidden');
     }
   });
+
+  function updateDropdown() {
+    const year = Number(input.value);
+    buttons.forEach((button, index) => {
+      button.innerText = String(year + index + 1);
+    });
+  }
 </script>
