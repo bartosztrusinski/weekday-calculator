@@ -9,7 +9,7 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
     <input
       type="text"
       data-year-input
-      class="w-full p-1 pl-2 text-lg text-slate-900"
+      class="z-10 w-full p-1 pl-2 text-lg text-slate-900"
       value={currentYear}
     />
     <svg
@@ -27,7 +27,7 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
     </svg>
     <div
       data-year-dropdown
-      class="absolute flex hidden max-h-56 w-full flex-col overflow-scroll bg-slate-50"
+      class="absolute z-20 flex hidden max-h-56 w-full flex-col overflow-scroll bg-slate-50"
     >
       {
         years.map((year) => (
@@ -44,13 +44,12 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
 </label>
 <script>
   const input = document.querySelector('[data-year-input]') as HTMLInputElement;
-  const buttons = document.querySelectorAll('button');
-  const dropdown = document.querySelector(
-    '[data-year-dropdown]',
-  ) as HTMLDivElement;
+  const dropdown = document.querySelector('[data-year-dropdown]')!;
+  const dropdownButtons = dropdown.querySelectorAll('button');
+
   const MAX_YEAR = 4000;
 
-  buttons.forEach((button) => {
+  dropdownButtons.forEach((button) => {
     button.addEventListener('click', () => {
       input.value = button.innerText;
     });
@@ -77,14 +76,14 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
     if (isNaN(year)) return;
 
     const suggestedYear = suggestYear(year);
-    buttons.forEach((button, index) => {
+    dropdownButtons.forEach((button, index) => {
       button.innerText = String(suggestedYear + index + 1);
     });
   }
 
   function suggestYear(year: number) {
     if (year > MAX_YEAR) {
-      return MAX_YEAR - buttons.length;
+      return MAX_YEAR - dropdownButtons.length;
     }
 
     year = Math.max(year, 1);
