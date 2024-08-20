@@ -4,7 +4,10 @@ const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
 <label>
   <p class="mb-1">Day</p>
-  <select class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900">
+  <select
+    data-day-input
+    class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900"
+  >
     {
       days.map((day) => (
         <option selected={day === 1} value={day}>

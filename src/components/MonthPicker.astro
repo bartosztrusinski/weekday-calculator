@@ -1,5 +1,5 @@
 ---
-enum Month {
+export enum Month {
   January = 1,
   February,
   March,
@@ -19,10 +19,13 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
 <label>
   <p class="mb-1">Month</p>
-  <select class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900">
+  <select
+    data-month-input
+    class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900"
+  >
     {
       months.map((month) => (
-        <option selected={month === 1} value={month}>
+        <option selected={month === 1} value={Month[month]}>
           {Month[month]}
         </option>
       ))
