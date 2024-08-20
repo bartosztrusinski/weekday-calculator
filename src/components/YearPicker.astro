@@ -48,6 +48,7 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
   const dropdownButtons = dropdown.querySelectorAll('button');
 
   const MAX_YEAR = 4000;
+  const SUGGESTED_YEARS = dropdownButtons.length;
 
   dropdownButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -82,8 +83,8 @@ const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
   }
 
   function suggestYear(year: number) {
-    if (year > MAX_YEAR) {
-      return MAX_YEAR - dropdownButtons.length;
+    if (year > MAX_YEAR - SUGGESTED_YEARS) {
+      return MAX_YEAR - SUGGESTED_YEARS;
     }
 
     year = Math.max(year, 1);
