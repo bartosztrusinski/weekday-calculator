@@ -1,0 +1,53 @@
+---
+import DatePicker from './DatePicker.astro';
+---
+
+<article class="flex flex-col items-center gap-5">
+  <section>
+    <DatePicker />
+  </section>
+  <section class="p-8">
+    <p class="text-5xl" data-weekday></p>
+  </section>
+</article>
+<script>
+  import { calculateWeekday, Weekday } from '../utils/calculateWeekday';
+  import type { Month } from './MonthPicker.astro';
+
+  const dayInput = document.querySelector(
+    '[data-day-input]',
+  ) as HTMLSelectElement;
+  const monthInput = document.querySelector(
+    '[data-month-input]',
+  ) as HTMLSelectElement;
+  const yearInput = document.querySelector(
+    '[data-year-input]',
+  ) as HTMLInputElement;
+  const dropdownButtons = document.querySelectorAll(
+    '[data-year-dropdown] button',
+  ) as NodeListOf<HTMLButtonElement>;
+  const weekdayElement = document.querySelector(
+    '[data-weekday]',
+  ) as HTMLParagraphElement;
+
+  [dayInput, monthInput, yearInput].forEach((input) => {
+    input.addEventListener('input', () => {
+      updateUI();
+    });
+  });
+
+  dropdownButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      yearInput.value = button.innerText;
+      updateUI();
+    });
+  });
+
+  function updateUI() {
+    const day = Number(dayInput.value);
+    const month = monthInput.value as keyof typeof Month;
+    const year = Number(yearInput.value);
+    const weekday = calculateWeekday(day, month, year);
+    weekdayElement.innerText = `${month} ${day}, ${year} is ${Weekday[weekday]}`;
+  }
+</script>
