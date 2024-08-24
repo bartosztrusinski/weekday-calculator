@@ -6,8 +6,12 @@ import DatePicker from './DatePicker.astro';
   <section>
     <DatePicker />
   </section>
-  <section class="p-8">
-    <p class="text-5xl" data-weekday></p>
+  <section class="p-2 text-center" data-weekday>
+    <p class="text-2xl sm:text-4xl"></p>
+    <p
+      class="bg-gradient bg-clip-text p-2 py-10 text-6xl font-black tracking-tight text-transparent sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[13rem]"
+    >
+    </p>
   </section>
 </article>
 <script>
@@ -26,9 +30,10 @@ import DatePicker from './DatePicker.astro';
   const dropdownButtons = document.querySelectorAll(
     '[data-year-dropdown] button',
   ) as NodeListOf<HTMLButtonElement>;
-  const weekdayElement = document.querySelector(
+  const resultElement = document.querySelector(
     '[data-weekday]',
-  ) as HTMLParagraphElement;
+  ) as HTMLDivElement;
+  const [dateParagraph, weekdayParagraph] = resultElement.querySelectorAll('p');
 
   [dayInput, monthInput, yearInput].forEach((input) => {
     input.addEventListener('input', () => {
@@ -43,11 +48,17 @@ import DatePicker from './DatePicker.astro';
     });
   });
 
+  updateUI();
+
   function updateUI() {
     const day = Number(dayInput.value);
     const month = monthInput.value as keyof typeof Month;
     const year = Number(yearInput.value);
     const weekday = calculateWeekday(day, month, year);
-    weekdayElement.innerText = `${month} ${day}, ${year} is ${Weekday[weekday]}`;
+    dateParagraph.innerText = `${month} ${day}, ${year} is `;
+    weekdayParagraph.innerText = Weekday[weekday];
+
+    console.log(weekdayParagraph);
+    console.log(Weekday[weekday]);
   }
 </script>
