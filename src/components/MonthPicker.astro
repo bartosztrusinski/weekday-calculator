@@ -15,6 +15,7 @@ export enum Month {
 }
 
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
+const currentMonth = new Date().getMonth() + 1;
 ---
 
 <label>
@@ -25,7 +26,7 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
   >
     {
       months.map((month) => (
-        <option selected={month === 1} value={Month[month]}>
+        <option selected={month === currentMonth} value={Month[month]}>
           {Month[month]}
         </option>
       ))
