@@ -18,3 +18,70 @@ const currentDay = new Date().getDate();
     }
   </select>
 </label>
+<script>
+  import type { Month } from './MonthPicker.astro';
+  import { isLeapYear } from '../utils/calculateWeekday';
+
+  enum DaysInMonth {
+    January = 31,
+    February = 28,
+    March = 31,
+    April = 30,
+    May = 31,
+    June = 30,
+    July = 31,
+    August = 31,
+    September = 30,
+    October = 31,
+    November = 30,
+    December = 31,
+  }
+
+  const dayInput = document.querySelector(
+    '[data-day-input]',
+  ) as HTMLSelectElement;
+  const monthInput = document.querySelector(
+    '[data-month-input]',
+  ) as HTMLSelectElement;
+  const yearInput = document.querySelector(
+    '[data-year-input]',
+  ) as HTMLInputElement;
+  const dropdownButtons = document.querySelectorAll(
+    '[data-year-dropdown] button',
+  ) as NodeListOf<HTMLButtonElement>;
+
+  [monthInput, yearInput].forEach((input) => {
+    input.addEventListener('input', () => {
+      updateDays();
+    });
+  });
+
+  dropdownButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      updateDays();
+    });
+  });
+
+  function updateDays() {
+    const month = monthInput.value as keyof typeof Month;
+    const year = Number(yearInput.value);
+    const isLeap = isLeapYear(year);
+    const daysInMonth =
+      DaysInMonth[month] + (isLeap && month === 'February' ? 1 : 0);
+    const updatedDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const currentlySelectedDay = Number(dayInput.value);
+    const newSelectedDay =
+      updatedDays.includes(currentlySelectedDay) ? currentlySelectedDay : (
+        daysInMonth
+      );
+
+    dayInput.innerHTML = updatedDays
+      .map(
+        (day) =>
+          `<option value="${day}" ${
+            day === newSelectedDay ? 'selected' : ''
+          }>${day}</option>`,
+      )
+      .join('');
+  }
+</script>

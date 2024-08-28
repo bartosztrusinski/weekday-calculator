@@ -61,6 +61,6 @@ function countLeapYears(year: number): number {
   return Math.floor(year / 4) - Math.floor(year / 100) + Math.floor(year / 400);
 }
 
-function isLeapYear(year: number): boolean {
+export function isLeapYear(year: number): boolean {
   return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 }
