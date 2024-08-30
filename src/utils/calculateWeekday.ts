@@ -31,7 +31,6 @@ export function calculateWeekday(
   year: number,
 ): Weekday {
   const firstDayOfMonth = getFirstDayOfMonth(month, year);
-  console.log(`First day of month is ${firstDayOfMonth}`, `\nDay is ${day}`);
   return (firstDayOfMonth + day - 1) % 7;
 }
 
@@ -44,10 +43,6 @@ function getFirstDayOfMonth(month: keyof typeof Month, year: number): Weekday {
       daysToShift +
       (isLeap && !['January', 'February'].includes(month) ? 1 : 0)) %
     7;
-
-  console.log(
-    `${firstDayOfYear} + ${daysToShift} + ${isLeap && !['January', 'February'].includes(month) ? 1 : 0} = ${firstDayOfMonth}`,
-  );
 
   return firstDayOfMonth;
 }
