@@ -15,44 +15,33 @@ import DatePicker from './DatePicker.astro';
   </section>
 </article>
 <script>
+  import { Weekday, type MonthKey } from '../utils/date';
   import {
     calculateWeekday,
-    isLeapYear,
-    Weekday,
+    getDaysInMonth,
+    suggestYear,
   } from '../utils/calculateWeekday';
-  import type { Month } from './MonthPicker.astro';
 
-  enum DaysInMonth {
-    January = 31,
-    February = 28,
-    March = 31,
-    April = 30,
-    May = 31,
-    June = 30,
-    July = 31,
-    August = 31,
-    September = 30,
-    October = 31,
-    November = 30,
-    December = 31,
-  }
-
+  const yearInput = document.querySelector(
+    '[data-year-input]',
+  ) as HTMLInputElement;
   const dayInput = document.querySelector(
     '[data-day-input]',
   ) as HTMLSelectElement;
   const monthInput = document.querySelector(
     '[data-month-input]',
   ) as HTMLSelectElement;
-  const yearInput = document.querySelector(
-    '[data-year-input]',
-  ) as HTMLInputElement;
-  const dropdownButtons = document.querySelectorAll(
-    '[data-year-dropdown] button',
-  ) as NodeListOf<HTMLButtonElement>;
+  const dropdown = document.querySelector('[data-year-dropdown]')!;
+  const dropdownButtons = dropdown.querySelectorAll('button');
   const resultElement = document.querySelector(
     '[data-weekday]',
   ) as HTMLDivElement;
   const [dateParagraph, weekdayParagraph] = resultElement.querySelectorAll('p');
+
+  const MAX_YEAR = 4000;
+  const SUGGESTED_YEARS = dropdownButtons.length;
+
+  updateUI();
 
   [dayInput, monthInput, yearInput].forEach((input) => {
     input.addEventListener('input', () => {
@@ -67,11 +56,24 @@ import DatePicker from './DatePicker.astro';
     });
   });
 
-  updateUI();
+  yearInput.addEventListener('input', () => {
+    updateDropdown();
+  });
+
+  yearInput.addEventListener('focus', () => {
+    updateDropdown();
+    dropdown.classList.remove('hidden');
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target !== yearInput) {
+      dropdown.classList.add('hidden');
+    }
+  });
 
   function updateUI() {
     const day = Number(dayInput.value);
-    const month = monthInput.value as keyof typeof Month;
+    const month = monthInput.value as MonthKey;
     const year = Number(yearInput.value);
     const weekday = calculateWeekday(day, month, year);
 
@@ -82,11 +84,9 @@ import DatePicker from './DatePicker.astro';
   }
 
   function updateDays() {
-    const month = monthInput.value as keyof typeof Month;
+    const month = monthInput.value as MonthKey;
     const year = Number(yearInput.value);
-    const isLeap = isLeapYear(year);
-    const daysInMonth =
-      DaysInMonth[month] + (isLeap && month === 'February' ? 1 : 0);
+    const daysInMonth = getDaysInMonth(month, year);
     const updatedDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
     const currentlySelectedDay = Number(dayInput.value);
     const newSelectedDay =
@@ -102,5 +102,17 @@ import DatePicker from './DatePicker.astro';
           }>${day}</option>`,
       )
       .join('');
+  }
+
+  function updateDropdown() {
+    const year = Number(yearInput.value);
+
+    if (isNaN(year)) return;
+
+    const suggestedYear = suggestYear(year, MAX_YEAR, SUGGESTED_YEARS);
+
+    dropdownButtons.forEach((button, index) => {
+      button.innerText = String(suggestedYear + index + 1);
+    });
   }
 </script>
