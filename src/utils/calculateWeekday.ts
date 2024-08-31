@@ -1,40 +1,21 @@
-import { Month } from '../components/MonthPicker.astro';
-
-export enum Weekday {
-  Monday = 0,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday,
-}
-
-enum DaysShiftInMonth {
-  January = 0,
-  February = 3,
-  March = 3,
-  April = 6,
-  May = 1,
-  June = 4,
-  July = 6,
-  August = 2,
-  September = 5,
-  October = 0,
-  November = 3,
-  December = 5,
-}
+import {
+  DaysInMonth,
+  DaysShiftInMonth,
+  Month,
+  Weekday,
+  type MonthKey,
+} from './date';
 
 export function calculateWeekday(
   day: number,
-  month: keyof typeof Month,
+  month: MonthKey,
   year: number,
 ): Weekday {
   const firstDayOfMonth = getFirstDayOfMonth(month, year);
   return (firstDayOfMonth + day - 1) % 7;
 }
 
-function getFirstDayOfMonth(month: keyof typeof Month, year: number): Weekday {
+function getFirstDayOfMonth(month: MonthKey, year: number): Weekday {
   const firstDayOfYear = getFirstDayOfYear(year);
   const daysToShift = DaysShiftInMonth[month];
   const isLeap = isLeapYear(year);
@@ -58,4 +39,32 @@ function countLeapYears(year: number): number {
 
 export function isLeapYear(year: number): boolean {
   return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+}
+
+export function getDaysInMonth(month: MonthKey, year: number): number {
+  return (
+    DaysInMonth[month] +
+    (isLeapYear(year) && Month[month] === Month.February ? 1 : 0)
+  );
+}
+
+export function suggestYear(
+  year: number,
+  maxYear: number,
+  suggestedYearsCount: number,
+): number {
+  if (year > maxYear - suggestedYearsCount) {
+    return maxYear - suggestedYearsCount;
+  }
+
+  year = Math.max(year, 1);
+
+  const firstDigit = Number(String(year)[0]);
+  const minYear = [1, 2].includes(firstDigit) ? 1000 : 100;
+
+  while (year < minYear) {
+    year *= 10;
+  }
+
+  return year;
 }
