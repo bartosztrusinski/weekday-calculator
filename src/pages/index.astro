@@ -1,15 +1,15 @@
 ---
-import WeekdayCalculator from '../components/WeekdayCalculator.astro';
+import WeekdayCalculator from '../components/WeekdayCalculator';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Weekday Calculator">
-  <main class="bg-hero-pattern h-full">
+  <main class="h-full bg-hero-pattern">
     <h1
       class="px-5 py-3 text-center text-2xl font-bold sm:text-left md:text-4xl"
     >
       Weekday Calculator
     </h1>
-    <WeekdayCalculator />
+    <WeekdayCalculator client:load />
   </main>
 </Layout>
