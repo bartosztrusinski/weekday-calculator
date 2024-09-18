@@ -10,16 +10,17 @@ type Props = {
 const MAX_YEAR = 4000;
 const SUGGESTED_YEARS = 20;
 
-export default function YearPicker({ selectedYear, onPick }: Props) {
+export default function YearPicker(props: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = createSignal(false);
 
-  const [suggestedYear, setSuggestedYear] = createSignal(
-    suggestYear(selectedYear, MAX_YEAR, SUGGESTED_YEARS),
-  );
-  const years = Array.from(
-    { length: SUGGESTED_YEARS },
-    (_, i) => suggestedYear() + i + 1,
-  );
+  const selectedYear = () => props.selectedYear;
+  const onPick = (year: number) => props.onPick(year);
+  const suggestedYear = () =>
+    suggestYear(selectedYear(), MAX_YEAR, SUGGESTED_YEARS);
+  const years = () =>
+    Array.from({ length: SUGGESTED_YEARS }, (_, i) => suggestedYear() + i + 1);
+
+  let buttonsRef!: HTMLDivElement;
 
   return (
     <label>
@@ -32,12 +33,10 @@ export default function YearPicker({ selectedYear, onPick }: Props) {
             const year = Number(event.target.value);
 
             onPick(year);
-            setSuggestedYear(suggestYear(year, MAX_YEAR, SUGGESTED_YEARS));
           }}
           type="text"
-          data-year-input
           class="z-10 w-full p-1 pl-2 text-lg text-slate-900"
-          value={selectedYear}
+          value={selectedYear()}
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -54,14 +53,18 @@ export default function YearPicker({ selectedYear, onPick }: Props) {
           ></path>
         </svg>
         <div
-          data-year-dropdown
+          ref={buttonsRef}
           class={`${isDropdownOpen() ? 'flex' : 'hidden'} absolute z-20 max-h-56 w-full flex-col overflow-scroll bg-slate-50`}
         >
-          {years.map((year) => (
+          {years().map((year) => (
             <button
               type="button"
               class="p-1 pl-2 text-left text-lg text-slate-900 hover:bg-slate-200"
-              onClick={[onPick, year]}
+              onClick={(event) => {
+                const year = Number(event.target.textContent);
+
+                onPick(year);
+              }}
             >
               {year}
             </button>
