@@ -1,31 +1,25 @@
-import {
-  DaysInMonth,
-  DaysShiftInMonth,
-  Month,
-  Weekday,
-  type MonthKey,
-} from './date';
+import { Month, monthData, Weekday } from './date';
 
 export function calculateWeekday(
   day: number,
-  month: MonthKey,
+  month: Month,
   year: number,
 ): Weekday {
   const firstDayOfMonth = getFirstDayOfMonth(month, year);
   return (firstDayOfMonth + day - 1) % 7;
 }
 
-function getFirstDayOfMonth(month: MonthKey, year: number): Weekday {
+function getFirstDayOfMonth(month: Month, year: number): Weekday {
   const firstDayOfYear = getFirstDayOfYear(year);
-  const daysToShift = DaysShiftInMonth[month];
+  const daysToShift = monthData[month].daysShift;
   const isLeap = isLeapYear(year);
-  const firstDayOfMonth =
+
+  return (
     (firstDayOfYear +
       daysToShift +
-      (isLeap && !['January', 'February'].includes(month) ? 1 : 0)) %
-    7;
-
-  return firstDayOfMonth;
+      (isLeap && month > Month.February ? 1 : 0)) %
+    7
+  );
 }
 
 function getFirstDayOfYear(year: number): Weekday {
@@ -41,11 +35,12 @@ export function isLeapYear(year: number): boolean {
   return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 }
 
-export function getDaysInMonth(month: MonthKey, year: number): number {
-  return (
-    DaysInMonth[month] +
-    (isLeapYear(year) && Month[month] === Month.February ? 1 : 0)
-  );
+export function getDaysInMonth(month: Month, year: number): number {
+  const data = monthData[month];
+
+  return month === Month.February && isLeapYear(year) ?
+      data.days + 1
+    : data.days;
 }
 
 export function suggestYear(

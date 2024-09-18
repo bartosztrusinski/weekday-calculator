@@ -1,16 +1,11 @@
-export enum DaysInMonth {
-  January = 31,
-  February = 28,
-  March = 31,
-  April = 30,
-  May = 31,
-  June = 30,
-  July = 31,
-  August = 31,
-  September = 30,
-  October = 31,
-  November = 30,
-  December = 31,
+export enum Weekday {
+  Monday = 0,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday,
 }
 
 export enum Month {
@@ -28,29 +23,73 @@ export enum Month {
   December,
 }
 
-export type MonthKey = keyof typeof Month;
+type MonthData = {
+  name: string;
+  days: number;
+  daysShift: number;
+};
 
-export enum Weekday {
-  Monday = 0,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday,
-}
-
-export enum DaysShiftInMonth {
-  January = 0,
-  February = 3,
-  March = 3,
-  April = 6,
-  May = 1,
-  June = 4,
-  July = 6,
-  August = 2,
-  September = 5,
-  October = 0,
-  November = 3,
-  December = 5,
-}
+export const monthData: {
+  [key in Month]: MonthData;
+} = {
+  [Month.January]: {
+    name: 'January',
+    days: 31,
+    daysShift: 0,
+  },
+  [Month.February]: {
+    name: 'February',
+    days: 28,
+    daysShift: 3,
+  },
+  [Month.March]: {
+    name: 'March',
+    days: 31,
+    daysShift: 3,
+  },
+  [Month.April]: {
+    name: 'April',
+    days: 30,
+    daysShift: 6,
+  },
+  [Month.May]: {
+    name: 'May',
+    days: 31,
+    daysShift: 1,
+  },
+  [Month.June]: {
+    name: 'June',
+    days: 30,
+    daysShift: 4,
+  },
+  [Month.July]: {
+    name: 'July',
+    days: 31,
+    daysShift: 6,
+  },
+  [Month.August]: {
+    name: 'August',
+    days: 31,
+    daysShift: 2,
+  },
+  [Month.September]: {
+    name: 'September',
+    days: 30,
+    daysShift: 5,
+  },
+  [Month.October]: {
+    name: 'October',
+    days: 31,
+    daysShift: 0,
+  },
+  [Month.November]: {
+    name: 'November',
+    days: 30,
+    daysShift: 3,
+  },
+  [Month.December]: {
+    name: 'December',
+    days: 31,
+    daysShift: 5,
+  },
+};
