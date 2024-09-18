@@ -1,20 +1,25 @@
 type Props = {
   selectedDay: number;
   days: number;
-  onPick: (event: Event) => void;
+  onPick: (day: number) => void;
 };
 
-export default function DayPicker({ selectedDay, days, onPick }: Props) {
+export default function DayPicker(props: Props) {
+  const selectedDay = () => props.selectedDay;
+  const days = () => props.days;
+
   return (
     <label>
       <p class="mb-1">Day</p>
       <select
-        data-day-input
         class="border-spacing-1 rounded-sm p-1 text-lg text-slate-900"
-        onChange={onPick}
+        onChange={(event) => {
+          const day = Number(event.target.value);
+          props.onPick(day);
+        }}
       >
-        {Array.from({ length: days }, (_, i) => i + 1).map((day) => (
-          <option value={day} selected={day === selectedDay}>
+        {Array.from({ length: days() }, (_, i) => i + 1).map((day) => (
+          <option value={day} selected={day === selectedDay()}>
             {day}
           </option>
         ))}
